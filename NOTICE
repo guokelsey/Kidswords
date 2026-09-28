@@ -1,0 +1,14 @@
+LearnQuest
+Copyright 2026 LearnQuest contributors
+Licensed under MIT (see LICENSE)
+
+This project includes no third-party assets at release time.
+
+When third-party assets are added (art, sound, fonts), they will be listed here
+with their licenses and source URLs. Maintain the principle: prefer CC0 / public
+domain, otherwise SPDX-compatible permissive licenses (MIT, Apache-2.0, BSD).
+Avoid GPL-family licenses to preserve the MIT distribution compatibility.
+
+Procedural audio: generated at runtime via the WebAudio API. No audio assets.
+Pixel art (future): target CC0 sources such as Kenney.nl or OpenGameArt.org CC0.
+Fonts (future): target OFL-licensed fonts (e.g. Google Fonts OFL subset).

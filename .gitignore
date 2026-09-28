@@ -1,0 +1,35 @@
+# deps
+node_modules/
+
+# build
+.svelte-kit/
+build/
+dist/
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# editor
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# user-imported content (private vocab lists, etc.)
+content/words/user.json
+content/math/user.json
+content/monsters/user.json
+content/shop/user.json
+
+# claude harness artifacts
+.claude/
+
+# coverage
+coverage/

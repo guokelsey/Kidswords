@@ -31,13 +31,16 @@
 
 <div class="app-shell">
   <header>
-    <span class="brand">{t('title')}</span>
+    <span class="brand">
+      <span class="brand-mark">🐉</span>
+      <span class="brand-text">{t('title')}</span>
+    </span>
     <div class="actions">
       <button class="icon-btn" onclick={toggleAudio} aria-label="toggle audio">
-        {audioOn ? '🔊' : '🔇'}
+        <span class="icon">{audioOn ? '🔊' : '🔇'}</span>
       </button>
       <button class="icon-btn" onclick={cycleLocale} aria-label="switch language">
-        {getLocale() === 'zh-CN' ? 'EN' : '中'}
+        <span class="icon">{getLocale() === 'zh-CN' ? 'EN' : '中'}</span>
       </button>
     </div>
   </header>
@@ -53,17 +56,25 @@
     padding: 0;
     height: 100%;
     font-family:
-      system-ui,
+      'SF Pro Rounded',
       -apple-system,
+      BlinkMacSystemFont,
       'PingFang SC',
       'Microsoft YaHei',
+      system-ui,
       sans-serif;
-    background: linear-gradient(180deg, #e0f7ff 0%, #fafafa 60%);
-    color: #1f2937;
+    background: linear-gradient(180deg, #f5ebe0 0%, #faf6ef 35%, #ffffff 100%);
+    color: #1e293b;
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.01em;
   }
   :global(*) {
     box-sizing: border-box;
+  }
+  :global(h1, h2, h3) {
+    font-family: 'SF Pro Rounded', system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
   .app-shell {
     min-height: 100vh;
@@ -74,34 +85,56 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 1.25rem;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 0.85rem 1.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: saturate(160%) blur(12px);
+    -webkit-backdrop-filter: saturate(160%) blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    position: sticky;
+    top: 0;
+    z-index: 10;
   }
   .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-weight: 700;
     font-size: 1.125rem;
-    color: #064e3b;
+    color: #0f766e;
+  }
+  .brand-mark {
+    font-size: 1.4rem;
+    filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.1));
   }
   .actions {
     display: flex;
     gap: 0.5rem;
   }
   .icon-btn {
-    background: transparent;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 0.4rem 0.7rem;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(15, 118, 110, 0.15);
+    border-radius: 999px;
+    padding: 0.45rem 0.85rem;
     font-size: 0.95rem;
     cursor: pointer;
     font-family: inherit;
     color: inherit;
     min-height: 40px;
     min-width: 40px;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
   }
   .icon-btn:hover {
-    background: rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 1);
+    border-color: rgba(15, 118, 110, 0.3);
+    transform: translateY(-1px);
+  }
+  .icon-btn:active {
+    transform: translateY(0);
+  }
+  .icon {
+    display: inline-block;
+    line-height: 1;
   }
   main {
     flex: 1;

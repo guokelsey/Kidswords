@@ -1,29 +1,17 @@
 <script lang="ts">
   import Button from '$lib/components/Button.svelte';
-  import PixiCanvas from '$lib/components/PixiCanvas.svelte';
-  import { throwStone } from '$lib/audio/synth';
   import { unlock } from '$lib/audio/engine';
+  import { throwStone } from '$lib/audio/synth';
   import { t } from '$lib/i18n';
-
-  let hits = $state(0);
-  let throwing = $state(false);
-  let impactKey = $state(0); // bump to retrigger hit animation
 
   function onPlay() {
     unlock();
     throwStone();
-    throwing = true;
-    setTimeout(() => {
-      throwing = false;
-      hits += 1;
-      impactKey += 1;
-    }, 420);
+    window.location.href = '/battle';
   }
 </script>
 
 <div class="stage">
-  <PixiCanvas background="transparent" />
-
   <div class="sky" aria-hidden="true">
     <div class="cloud cloud-a"></div>
     <div class="cloud cloud-b"></div>
@@ -32,71 +20,61 @@
 
   <div class="ground" aria-hidden="true"></div>
 
-  <div class="monster-wrap">
-    {#key impactKey}
-      <div class="monster" class:hit={impactKey > 0}>
-        <svg viewBox="0 0 200 180" width="200" height="180" aria-label="slime monster">
-          <ellipse cx="100" cy="168" rx="62" ry="8" fill="rgba(0,0,0,0.15)" />
-          <defs>
-            <linearGradient id="slimeBody" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#7dd3fc" />
-              <stop offset="60%" stop-color="#38bdf8" />
-              <stop offset="100%" stop-color="#0284c7" />
-            </linearGradient>
-            <radialGradient id="slimeShine" cx="0.35" cy="0.25" r="0.5">
-              <stop offset="0%" stop-color="rgba(255,255,255,0.85)" />
-              <stop offset="100%" stop-color="rgba(255,255,255,0)" />
-            </radialGradient>
-          </defs>
-          <path
-            d="M30 130 Q30 50 100 50 Q170 50 170 130 Q170 158 100 158 Q30 158 30 130 Z"
-            fill="url(#slimeBody)"
-          />
-          <ellipse cx="70" cy="78" rx="36" ry="22" fill="url(#slimeShine)" />
-          <ellipse cx="78" cy="105" rx="9" ry="11" fill="#0f172a" />
-          <ellipse cx="122" cy="105" rx="9" ry="11" fill="#0f172a" />
-          <circle cx="81" cy="101" r="3" fill="#fff" />
-          <circle cx="125" cy="101" r="3" fill="#fff" />
-          <path
-            d="M82 130 Q100 142 118 130"
-            fill="none"
-            stroke="#0f172a"
-            stroke-width="3"
-            stroke-linecap="round"
-          />
-          <circle cx="65" cy="125" r="6" fill="#fda4af" opacity="0.7" />
-          <circle cx="135" cy="125" r="6" fill="#fda4af" opacity="0.7" />
-        </svg>
-        <div class="hp-bar" aria-hidden="true">
-          <div class="hp-fill" style="width: {Math.max(0, 100 - hits * 8)}%"></div>
-        </div>
-      </div>
-    {/key}
+  <div class="hero">
+    <svg viewBox="0 0 220 200" width="260" height="240" aria-label="slime hero">
+      <defs>
+        <radialGradient id="heroShadow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="rgba(0,0,0,0.35)" />
+          <stop offset="100%" stop-color="rgba(0,0,0,0)" />
+        </radialGradient>
+        <linearGradient id="heroBody" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#a5f3fc" />
+          <stop offset="50%" stop-color="#38bdf8" />
+          <stop offset="100%" stop-color="#0369a1" />
+        </linearGradient>
+        <radialGradient id="heroShine" cx="0.3" cy="0.2" r="0.4">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.9)" />
+          <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+        </radialGradient>
+      </defs>
+      <ellipse cx="110" cy="188" rx="76" ry="9" fill="url(#heroShadow)" />
+      <path
+        d="M28 138 Q28 48 110 48 Q192 48 192 138 Q192 172 110 172 Q28 172 28 138 Z"
+        fill="url(#heroBody)"
+        stroke="#0c4a6e"
+        stroke-width="2"
+      />
+      <ellipse cx="76" cy="78" rx="40" ry="24" fill="url(#heroShine)" />
+      <ellipse cx="62" cy="94" rx="7" ry="4" fill="rgba(255,255,255,0.5)" />
+      <circle cx="120" cy="150" r="5" fill="rgba(255,255,255,0.25)" />
+      <circle cx="95" cy="155" r="3" fill="rgba(255,255,255,0.2)" />
+      <ellipse cx="84" cy="115" rx="11" ry="13" fill="#0f172a" />
+      <ellipse cx="136" cy="115" rx="11" ry="13" fill="#0f172a" />
+      <circle cx="88" cy="110" r="4" fill="#fff" />
+      <circle cx="140" cy="110" r="4" fill="#fff" />
+      <circle cx="81" cy="119" r="2" fill="#fff" />
+      <circle cx="133" cy="119" r="2" fill="#fff" />
+      <circle cx="62" cy="138" r="8" fill="#fda4af" opacity="0.65" />
+      <circle cx="158" cy="138" r="8" fill="#fda4af" opacity="0.65" />
+      <path
+        d="M92 142 Q110 156 128 142"
+        fill="none"
+        stroke="#0f172a"
+        stroke-width="3.5"
+        stroke-linecap="round"
+      />
+      <ellipse cx="30" cy="142" rx="9" ry="6" fill="#0284c7" />
+      <ellipse cx="190" cy="142" rx="9" ry="6" fill="#0284c7" />
+    </svg>
   </div>
-
-  {#if throwing}
-    <div class="projectile" aria-hidden="true">
-      <svg viewBox="0 0 40 40" width="40" height="40">
-        <defs>
-          <radialGradient id="stoneGrad" cx="0.4" cy="0.4">
-            <stop offset="0%" stop-color="#d6d3d1" />
-            <stop offset="80%" stop-color="#78716c" />
-            <stop offset="100%" stop-color="#44403c" />
-          </radialGradient>
-        </defs>
-        <ellipse cx="20" cy="20" rx="15" ry="13" fill="url(#stoneGrad)" />
-        <ellipse cx="14" cy="14" rx="4" ry="3" fill="rgba(255,255,255,0.6)" />
-      </svg>
-    </div>
-  {/if}
 
   <div class="overlay">
     <h1>{t('title')}</h1>
     <p class="subtitle">{t('subtitle')}</p>
     <div class="cta">
-      <Button onclick={onPlay}>{t('play')}</Button>
+      <Button onclick={onPlay}>开始游戏</Button>
     </div>
-    <p class="hits">击中 {hits} 次</p>
+    <p class="hint">看中文 · 拼英文 · 攻击小怪物</p>
   </div>
 </div>
 
@@ -120,32 +98,32 @@
     pointer-events: none;
   }
   .cloud-a {
-    width: 220px;
-    height: 80px;
-    top: 8%;
-    left: 10%;
-    animation: drift 28s linear infinite;
+    width: 240px;
+    height: 90px;
+    top: 6%;
+    left: 8%;
+    animation: drift 30s linear infinite;
   }
   .cloud-b {
-    width: 160px;
-    height: 60px;
-    top: 18%;
-    right: 12%;
-    animation: drift 38s linear infinite reverse;
+    width: 180px;
+    height: 70px;
+    top: 16%;
+    right: 10%;
+    animation: drift 42s linear infinite reverse;
   }
   .cloud-c {
-    width: 280px;
-    height: 90px;
-    top: 30%;
-    left: 50%;
-    animation: drift 48s linear infinite;
+    width: 300px;
+    height: 100px;
+    top: 28%;
+    left: 48%;
+    animation: drift 52s linear infinite;
   }
   @keyframes drift {
     0% {
       transform: translateX(0);
     }
     50% {
-      transform: translateX(40px);
+      transform: translateX(50px);
     }
     100% {
       transform: translateX(0);
@@ -156,82 +134,36 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 28%;
+    height: 26%;
     background: linear-gradient(180deg, #86efac 0%, #4ade80 60%, #16a34a 100%);
     border-top: 4px solid #15803d;
     box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.2);
   }
-  .monster-wrap {
+  .ground::before {
+    content: '';
     position: absolute;
-    bottom: 22%;
+    top: 6px;
+    left: 5%;
+    width: 90%;
+    height: 6px;
+    background: radial-gradient(ellipse, rgba(255, 255, 255, 0.5), transparent 70%);
+    border-radius: 999px;
+  }
+  .hero {
+    position: absolute;
+    bottom: 18%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
+    animation: float 2.6s ease-in-out infinite;
   }
-  .monster {
-    transition: transform 0.12s ease;
-  }
-  .monster.hit {
-    animation: shake 0.32s ease;
-  }
-  @keyframes shake {
+  @keyframes float {
     0%,
     100% {
-      transform: translateX(0);
+      transform: translateX(-50%) translateY(0);
     }
-    20% {
-      transform: translateX(-8px) rotate(-2deg);
-    }
-    40% {
-      transform: translateX(7px) rotate(2deg);
-    }
-    60% {
-      transform: translateX(-5px) rotate(-1deg);
-    }
-    80% {
-      transform: translateX(4px) rotate(1deg);
-    }
-  }
-  .hp-bar {
-    width: 140px;
-    height: 10px;
-    margin: 0.5rem auto 0;
-    background: rgba(15, 23, 42, 0.15);
-    border-radius: 999px;
-    overflow: hidden;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-  .hp-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #f43f5e, #fb7185);
-    transition: width 0.3s ease;
-    border-radius: 999px;
-  }
-  .projectile {
-    position: absolute;
-    bottom: 28%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 3;
-    animation: fly 0.42s cubic-bezier(0.5, 0.05, 0.8, 0.4) forwards;
-  }
-  @keyframes fly {
-    0% {
-      left: 50%;
-      bottom: 24%;
-      transform: translateX(-50%) rotate(0deg) scale(1);
-      opacity: 1;
-    }
-    60% {
-      left: 50%;
-      bottom: 38%;
-      opacity: 1;
-    }
-    100% {
-      left: 50%;
-      bottom: 45%;
-      transform: translateX(-50%) rotate(540deg) scale(0.4);
-      opacity: 0;
+    50% {
+      transform: translateX(-50%) translateY(-10px);
     }
   }
   .overlay {
@@ -241,7 +173,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.9rem;
     padding: 2rem;
     pointer-events: none;
     z-index: 4;
@@ -265,10 +197,9 @@
   .cta {
     margin-top: 0.75rem;
   }
-  .hits {
+  .hint {
     margin: 0.5rem 0 0;
     font-size: 0.9rem;
     color: #64748b;
-    font-variant-numeric: tabular-nums;
   }
 </style>

@@ -10,8 +10,8 @@
 
   let monster = $state({
     id: 'slime',
-    hp: 50,
-    maxHp: 50,
+    hp: 120,
+    maxHp: 120,
     art: 'slime'
   });
   let currentWord: Word | null = $state(null);
@@ -23,17 +23,20 @@
   let shaking = $state(false);
   let inputRef: HTMLInputElement;
   let rng = mulberry32(Date.now() & 0xffffffff);
+  // Avoid the last N questions to reduce repetition when the deck is short.
+  const ANTI_REPEAT_WINDOW = 6;
+  let recentIds: string[] = [];
 
-  const BASE_DAMAGE = 10;
+  const BASE_DAMAGE = 8;
 
   function nextQuestion() {
-    let next = pickRandom(rng, SAMPLE_WORDS);
-    if (SAMPLE_WORDS.length > 1) {
-      while (next.id === currentWord?.id) {
-        next = pickRandom(rng, SAMPLE_WORDS);
-      }
-    }
+    const pool =
+      SAMPLE_WORDS.length > ANTI_REPEAT_WINDOW
+        ? SAMPLE_WORDS.filter((w) => !recentIds.includes(w.id))
+        : SAMPLE_WORDS;
+    const next = pickRandom(rng, pool);
     currentWord = next;
+    recentIds = [next.id, ...recentIds].slice(0, ANTI_REPEAT_WINDOW);
     userInput = '';
     feedback = 'idle';
     setTimeout(() => inputRef?.focus(), 30);

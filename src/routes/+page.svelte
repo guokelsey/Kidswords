@@ -4,7 +4,7 @@
   import { throwStone } from '$lib/audio/synth';
   import { t } from '$lib/i18n';
 
-  function onPlay() {
+  function goSpell() {
     unlock();
     throwStone();
     window.location.href = '/battle';
@@ -71,10 +71,20 @@
   <div class="overlay">
     <h1>{t('title')}</h1>
     <p class="subtitle">{t('subtitle')}</p>
-    <div class="cta">
-      <Button onclick={onPlay}>开始游戏</Button>
+
+    <div class="modes" role="group" aria-label="选择模式">
+      <button class="mode-card" onclick={goSpell} aria-label="开始拼单词">
+        <span class="mode-icon">📖</span>
+        <span class="mode-title">拼单词</span>
+        <span class="mode-desc">看中文 · 拼英文 · 打怪物</span>
+      </button>
+      <button class="mode-card mode-card-disabled" disabled aria-label="口算模式开发中">
+        <span class="mode-icon">➕</span>
+        <span class="mode-title">口算</span>
+        <span class="mode-desc">敬请期待</span>
+        <span class="badge">M3</span>
+      </button>
     </div>
-    <p class="hint">看中文 · 拼英文 · 攻击小怪物</p>
   </div>
 </div>
 
@@ -173,7 +183,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.9rem;
+    gap: 1rem;
     padding: 2rem;
     pointer-events: none;
     z-index: 4;
@@ -194,12 +204,69 @@
     color: #475569;
     font-weight: 500;
   }
-  .cta {
-    margin-top: 0.75rem;
+  .modes {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 640px;
   }
-  .hint {
-    margin: 0.5rem 0 0;
-    font-size: 0.9rem;
+  .mode-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(15, 118, 110, 0.18);
+    border-radius: 22px;
+    padding: 1.1rem 1.5rem;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    font-family: inherit;
+    color: inherit;
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease,
+      border-color 0.12s ease;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    position: relative;
+  }
+  .mode-card:hover:not(.mode-card-disabled) {
+    transform: translateY(-3px);
+    border-color: rgba(15, 118, 110, 0.4);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+  }
+  .mode-card:active:not(.mode-card-disabled) {
+    transform: translateY(0);
+  }
+  .mode-card-disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+  .mode-icon {
+    font-size: 2.4rem;
+    line-height: 1;
+  }
+  .mode-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f766e;
+  }
+  .mode-desc {
+    font-size: 0.85rem;
     color: #64748b;
+  }
+  .badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: #fbbf24;
+    color: #78350f;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
   }
 </style>
